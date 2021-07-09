@@ -1,7 +1,7 @@
 import express from "express";
-import { PORT } from "./util/env.vars";
-import sequelize from "./util/mysql.config";
+import { PORT, MONGODB_URI } from "./util/env.vars";
 import authRouter from "./routes/auth";
+import mongoose from "mongoose";
 
 const app = express();
 
@@ -12,9 +12,8 @@ app.use(express.urlencoded({ extended: false }));
 //Routes
 app.use(authRouter);
 
-sequelize
-  //   .sync({ force: true })
-  .sync()
+mongoose
+  .connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => {
     app.listen(PORT, () => {
       console.log(`Listening in port ${PORT}....`);
