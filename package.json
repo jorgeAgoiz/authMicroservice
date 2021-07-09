@@ -1,0 +1,36 @@
+{
+  "name": "authMicroservice",
+  "version": "1.0.0",
+  "description": "Auth Microservice",
+  "main": "index.js",
+  "scripts": {
+    "start": "node build/index.js",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jorgeAgoiz/authMicroservice.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jorgeAgoiz/authMicroservice/issues"
+  },
+  "homepage": "https://github.com/jorgeAgoiz/authMicroservice#readme",
+  "dependencies": {
+    "dotenv": "10.0.0",
+    "express": "4.17.1",
+    "mysql2": "2.2.5",
+    "sequelize": "6.6.5"
+  },
+  "devDependencies": {
+    "@types/express": "4.17.13",
+    "@types/node": "16.3.0",
+    "@types/validator": "13.6.3",
+    "nodemon": "2.0.10",
+    "ts-node": "10.0.0",
+    "typescript": "4.3.5"
+  }
+}
