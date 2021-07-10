@@ -1,5 +1,5 @@
 import express from "express";
-import { Teacher, Client, AvailableDays, Days } from "../types/auth";
+import { Teacher, Client, Days } from "../types/auth";
 
 const authRouter = express.Router();
 
