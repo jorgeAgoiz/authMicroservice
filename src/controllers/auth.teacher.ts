@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Teacher from "../models/teacher";
+import bcrypt from "bcrypt";
 
 // POST "/auth/teacher/signup"
 export const signUpTeacher = async (
@@ -7,7 +8,26 @@ export const signUpTeacher = async (
   res: Response,
   next: NextFunction
 ) => {
-  const yoMismo = req.body;
-  const result = await new Teacher(yoMismo).save();
-  res.send(result);
+  const { full_name, email, password, languages, birthday, province, city } =
+    req.body;
+
+  try {
+    const salt: string = await bcrypt.genSalt(12);
+    const hashedPassword: string = await bcrypt.hash(password, salt);
+    const yoMismo: object = {
+      full_name,
+      email,
+      password: hashedPassword,
+      languages,
+      birthday,
+      province,
+      city,
+    };
+    const result = await new Teacher(yoMismo).save();
+    return res
+      .status(201)
+      .json({ message: "User created!!", user: result, status_code: 201 });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message, status_code: 500 });
+  }
 };

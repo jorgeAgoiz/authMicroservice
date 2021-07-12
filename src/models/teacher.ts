@@ -1,4 +1,5 @@
 import * as mongoose from "mongoose";
+import { ITeacher } from "../types/auth";
 
 const Schema = mongoose.Schema;
 
@@ -43,4 +44,4 @@ const teacherSchema = new Schema(
   }
 );
 
-export default mongoose.model("Teacher", teacherSchema);
+export default mongoose.model<ITeacher>("Teacher", teacherSchema);
