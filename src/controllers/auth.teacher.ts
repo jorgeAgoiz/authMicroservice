@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Teacher from "../models/teacher";
 import bcrypt from "bcrypt";
+import { ITeacher } from "../types/auth";
 
 // POST "/auth/teacher/signup"
 export const signUpTeacher = async (
@@ -23,10 +24,10 @@ export const signUpTeacher = async (
       province,
       city,
     };
-    const result = await new Teacher(yoMismo).save();
+    const newUser: ITeacher = await new Teacher(yoMismo).save();
     return res
       .status(201)
-      .json({ message: "User created!!", user: result, status_code: 201 });
+      .json({ message: "User created!!", user: newUser, status_code: 201 });
   } catch (error: any) {
     return res.status(500).json({ message: error.message, status_code: 500 });
   }
