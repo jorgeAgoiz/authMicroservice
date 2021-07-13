@@ -7,10 +7,16 @@ const express_1 = __importDefault(require("express"));
 const env_vars_1 = require("./util/env.vars");
 const auth_1 = __importDefault(require("./routes/auth"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const compression_1 = __importDefault(require("compression"));
+const cors_1 = __importDefault(require("cors"));
+const helmet_1 = __importDefault(require("helmet"));
 const app = express_1.default();
 //Middlewares
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
+app.use(cors_1.default());
+app.use(helmet_1.default());
+app.use(compression_1.default());
 //Routes
 app.use(auth_1.default);
 mongoose_1.default
