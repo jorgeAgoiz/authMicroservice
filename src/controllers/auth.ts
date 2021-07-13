@@ -32,7 +32,7 @@ export const signUpUser = async (
       .json({ message: "User registered", user: newUser, status_code: 201 });
   } catch (error: any) {
     return res
-      .status(500)
+      .status(400)
       .json({ message: error.message, status_code: 500 });
   }
 };
@@ -45,14 +45,14 @@ export const signInUser = async (req: Request, res: Response, next: NextFunction
     if (user) {
       const result: boolean = await bcrypt.compare(password, user.password)
       !result ? 
-        res.status(500).json({ message: "Wrong password"}) :
+        res.status(401).json({ message: "Wrong password"}) :
         res.status(200).json({ message: "Logged", user: user })
     } else {
-      throw new Error("Wrong email, user not found.")
+      return res.status(401).json({ message: "Wrong email, user not found."})
     }
     
   } catch (error) {
-      return res.status(500).json({ message: error.message })
+      return res.status(400).json({ message: error.message })
   }
-
 }
+
