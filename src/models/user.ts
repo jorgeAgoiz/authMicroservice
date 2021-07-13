@@ -1,10 +1,15 @@
 import * as mongoose from "mongoose";
-import { ITeacher } from "../types/auth";
+import { IUser } from "../types/auth";
 
 const Schema = mongoose.Schema;
 
-const teacherSchema = new Schema(
+const userSchema = new Schema(
   {
+    type_user: {
+      type: String,
+      required: true,
+      enum: ["teacher", "student"]
+    },
     full_name: {
       type: String,
       required: true,
@@ -15,6 +20,7 @@ const teacherSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      lowercase: true
     },
     password: {
       type: String,
@@ -27,7 +33,7 @@ const teacherSchema = new Schema(
     languages: [
       {
         type: String,
-        required: true,
+        lowercase: true
       },
     ],
     province: {
@@ -44,4 +50,4 @@ const teacherSchema = new Schema(
   }
 );
 
-export default mongoose.model<ITeacher>("Teacher", teacherSchema);
+export default mongoose.model<IUser>("User", userSchema);

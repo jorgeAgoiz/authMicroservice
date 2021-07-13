@@ -1,9 +1,12 @@
 import express from "express";
-import { signUpTeacher } from "../controllers/auth.teacher";
+import { signUpUser, signInUser } from '../controllers/auth';
 
 const authRouter = express.Router();
 
-// POST Sign Up Teachers
-authRouter.post("/auth/teacher/signup", signUpTeacher);
+// POST Sign Up Users
+authRouter.post("/auth/signup", signUpUser);
+
+// POST Sign In Users
+authRouter.post("/auth/signin", signInUser);
 
 export default authRouter;
