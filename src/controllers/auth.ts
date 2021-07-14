@@ -3,8 +3,7 @@ import User from "../models/user";
 import bcrypt from "bcrypt";
 import { IUser } from "../types/auth";
 import jwt from "jsonwebtoken";
-
-const SECRET: any = process.env.JWT_SECRET;
+import { SECRET } from "../util/env.vars";
 
 // POST "/auth/signup"
 export const signUpUser = async (
@@ -81,5 +80,14 @@ export const signInUser = async (
 };
 
 //PATCH "/auth" ***** Para actualizar perfil de usuario
+
+export const updateUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log("Hi!! from update profile controller!!");
+  console.log(req.body);
+};
 
 //DELETE "/auth" ***** Para eliminar usuario
