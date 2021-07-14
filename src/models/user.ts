@@ -8,7 +8,7 @@ const userSchema = new Schema(
     type_user: {
       type: String,
       required: true,
-      enum: ["teacher", "student"]
+      enum: ["teacher", "student"],
     },
     full_name: {
       type: String,
@@ -20,7 +20,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      lowercase: true
+      lowercase: true,
     },
     password: {
       type: String,
@@ -33,7 +33,7 @@ const userSchema = new Schema(
     languages: [
       {
         type: String,
-        lowercase: true
+        lowercase: true,
       },
     ],
     province: {
@@ -43,6 +43,9 @@ const userSchema = new Schema(
     city: {
       type: String,
       required: true,
+    },
+    profile_picture: {
+      type: String,
     },
   },
   {

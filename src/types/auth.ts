@@ -9,4 +9,5 @@ export interface IUser extends Document {
   languages?: Array<string>;
   province: string;
   city: string;
+  profile_picture?: string; // Nueva propiedad
 }
