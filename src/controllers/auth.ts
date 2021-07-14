@@ -86,7 +86,6 @@ export const updateUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("Hi!! from update profile controller!!");
   console.log(req.body);
 };
 
