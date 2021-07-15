@@ -20,9 +20,10 @@ export const signUpUser = async (
     birthday,
     province,
     city,
-    profile_picture,
   } = req.body;
 
+  const picture = req.file;
+  console.log(req.file);
   try {
     const salt: string = await bcrypt.genSalt(12);
     const hashedPassword: string = await bcrypt.hash(password, salt);
@@ -36,7 +37,7 @@ export const signUpUser = async (
       birthday,
       province,
       city,
-      profile_picture,
+      profile_picture: picture,
     };
     const newUser: IUser = await new User(user).save();
     return res
@@ -124,7 +125,7 @@ export const updateUser = async (
       updateUser,
       {
         new: true,
-        omitUndefined: true
+        omitUndefined: true,
       }
     ).select({ password: 0 });
     if (!newUserProfile) {
@@ -144,19 +145,30 @@ export const updateUser = async (
 };
 
 //DELETE "/auth" ***** Para eliminar usuario
-export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { id } = req.body;
 
   try {
-    const userRemoved = await User.findByIdAndDelete(id).select({ password: 0 });
+    const userRemoved = await User.findByIdAndDelete(id).select({
+      password: 0,
+    });
     if (!userRemoved) {
-      return res.status(404).json({ message: "Error, user not found", status_code: 404})
+      return res
+        .status(404)
+        .json({ message: "Error, user not found", status_code: 404 });
     }
 
-    return res.status(200).json({ message: "User deleted successfully", user: userRemoved, status_code: 200 });
+    return res.status(200).json({
+      message: "User deleted successfully",
+      user: userRemoved,
+      status_code: 200,
+    });
   } catch (error: any) {
-    return res.status(400).json({ message: error.message, status_code: 400})
+    return res.status(400).json({ message: error.message, status_code: 400 });
   }
-}
+};
 //GET "/auth" ***** Para obtener los usuatios
-
