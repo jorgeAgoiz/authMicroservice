@@ -12,12 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signInUser = exports.signUpUser = void 0;
+exports.updateUser = exports.signInUser = exports.signUpUser = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const env_vars_1 = require("../util/env.vars");
 // POST "/auth/signup"
 const signUpUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { type_user, full_name, email, password, languages, birthday, province, city, } = req.body;
+    const { type_user, full_name, email, password, languages, birthday, province, city, profile_picture, } = req.body;
     try {
         const salt = yield bcrypt_1.default.genSalt(12);
         const hashedPassword = yield bcrypt_1.default.hash(password, salt);
@@ -30,6 +32,7 @@ const signUpUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             birthday,
             province,
             city,
+            profile_picture,
         };
         const newUser = yield new user_1.default(user).save();
         return res
@@ -41,16 +44,22 @@ const signUpUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.signUpUser = signUpUser;
-// POST "/auth/signin"
+// POST "/auth/signin" ******* JWT Implementado
 const signInUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { password, email } = req.body;
     try {
         const user = yield user_1.default.findOne({ email });
         if (user) {
-            const result = yield bcrypt_1.default.compare(password, user.password);
-            !result
-                ? res.status(401).json({ message: "Wrong password" })
-                : res.status(200).json({ message: "Logged", user: user });
+            const validPass = yield bcrypt_1.default.compare(password, user.password);
+            if (!validPass) {
+                return res.status(401).json({ message: "Wrong password" });
+            }
+            else {
+                const token = jsonwebtoken_1.default.sign({ id: user._id, city: user.city }, env_vars_1.SECRET, {
+                    expiresIn: 7200,
+                });
+                return res.status(200).json({ message: "Logged", user_token: token });
+            }
         }
         else {
             return res.status(401).json({ message: "Wrong email, user not found." });
@@ -61,4 +70,10 @@ const signInUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.signInUser = signInUser;
+//PATCH "/auth" ***** Para actualizar perfil de usuario
+const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
+});
+exports.updateUser = updateUser;
+//DELETE "/auth" ***** Para eliminar usuario
 //# sourceMappingURL=auth.js.map

@@ -60,7 +60,9 @@ export const signInUser = async (
       const validPass: boolean = await bcrypt.compare(password, user.password);
 
       if (!validPass) {
-        return res.status(401).json({ message: "Wrong password" });
+        return res
+          .status(401)
+          .json({ message: "Wrong password", status_code: 401 });
       } else {
         const token: string = jwt.sign(
           { id: user._id, city: user.city },
@@ -69,24 +71,75 @@ export const signInUser = async (
             expiresIn: 7200,
           }
         );
-        return res.status(200).json({ message: "Logged", user_token: token });
+        return res
+          .status(200)
+          .json({ message: "Logged", user_token: token, status_code: 200 });
       }
     } else {
-      return res.status(401).json({ message: "Wrong email, user not found." });
+      return res
+        .status(401)
+        .json({ message: "Wrong email, user not found.", status_code: 401 });
     }
   } catch (error: any) {
-    return res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message, status_code: 400 });
   }
 };
 
 //PATCH "/auth" ***** Para actualizar perfil de usuario
-
 export const updateUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  console.log(req.body);
+  const {
+    userId,
+    full_name,
+    email,
+    birthday,
+    province,
+    city,
+    profile_picture,
+    languages,
+  } = req.body;
+  let password = req.body.password;
+
+  try {
+    if (password) {
+      const salt: string = await bcrypt.genSalt(12);
+      const hashedPassword: string = await bcrypt.hash(password, salt);
+      password = hashedPassword;
+    }
+    const updateUser = {
+      full_name,
+      email,
+      birthday,
+      province,
+      city,
+      profile_picture,
+      languages,
+      password,
+    };
+    const newUserProfile: IUser | null = await User.findByIdAndUpdate(
+      userId,
+      updateUser,
+      {
+        new: true,
+      }
+    ).select({ password: 0 });
+    if (!newUserProfile) {
+      return res
+        .status(404)
+        .json({ message: "Error, user not found", status_code: 404 });
+    }
+
+    return res.status(201).json({
+      message: "User updated",
+      user: newUserProfile,
+      status_code: 201,
+    });
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message, status_code: 400 });
+  }
 };
 
 //DELETE "/auth" ***** Para eliminar usuario
