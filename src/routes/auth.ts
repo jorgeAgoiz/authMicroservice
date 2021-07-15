@@ -1,5 +1,5 @@
 import express from "express";
-import { signUpUser, signInUser, updateUser } from "../controllers/auth";
+import { signUpUser, signInUser, updateUser, deleteUser } from '../controllers/auth';
 import { verifyToken } from "../middlewares/auth.jwt";
 
 const authRouter = express.Router();
@@ -12,5 +12,8 @@ authRouter.post("/auth/signin", signInUser);
 
 // PATCH Update profile
 authRouter.patch("/auth", verifyToken, updateUser);
+
+// DELETE Delete User
+authRouter.delete("/auth", verifyToken, deleteUser)
 
 export default authRouter;
