@@ -1,3 +1,4 @@
+import { File } from "aws-sdk/clients/codecommit";
 import { Document } from "mongoose";
 
 export interface IUser extends Document {
@@ -10,4 +11,23 @@ export interface IUser extends Document {
   province: string;
   city: string;
   profile_picture?: string; // Nueva propiedad
+}
+
+export interface IPicture {
+  fieldname?: string;
+  originalname?: string;
+  encoding?: string;
+  mimetype?: string;
+  size?: number;
+  bucket?: string;
+  key?: string;
+  acl?: string;
+  contentType?: string;
+  contentDisposition?: any;
+  storageClass?: string;
+  serverSideEncryption?: any;
+  metadata?: { fieldName: string };
+  location?: string;
+  etag?: string;
+  versionId?: any;
 }

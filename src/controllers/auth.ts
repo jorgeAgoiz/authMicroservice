@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/user";
 import bcrypt from "bcrypt";
-import { IUser } from "../types/auth";
+import { IUser, IPicture } from "../types/auth";
 import jwt from "jsonwebtoken";
 import { SECRET } from "../util/env.vars";
 
@@ -21,8 +21,11 @@ export const signUpUser = async (
     province,
     city,
   } = req.body;
-
-  console.log(req.file); // ************************************************************
+  let profile_picture: string | undefined = "";
+  if (req.file) {
+    const pathName: IPicture = req.file;
+    profile_picture = pathName.location;
+  }
 
   try {
     const salt: string = await bcrypt.genSalt(12);
@@ -37,6 +40,7 @@ export const signUpUser = async (
       birthday,
       province,
       city,
+      profile_picture,
     };
     const newUser: IUser = await new User(user).save();
     return res
