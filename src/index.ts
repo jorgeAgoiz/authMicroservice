@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import compression from "compression";
 import cors from "cors";
 import helmet from "helmet";
+import { apiLimiter } from "./util/rate.limiter";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(helmet());
 app.use(compression());
+app.use(apiLimiter);
 
 //Routes
 app.use(authRouter);

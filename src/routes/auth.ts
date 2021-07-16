@@ -4,6 +4,7 @@ import {
   signInUser,
   updateUser,
   deleteUser,
+  getUsersOf,
 } from "../controllers/auth";
 import { verifyToken } from "../middlewares/auth.jwt";
 import { goUpload } from "../middlewares/images.s3";
@@ -21,5 +22,8 @@ authRouter.patch("/auth", [verifyToken, goUpload], updateUser);
 
 // DELETE Delete User
 authRouter.delete("/auth", verifyToken, deleteUser);
+
+// GET Get users of
+authRouter.get("/auth/:type_user", getUsersOf);
 
 export default authRouter;

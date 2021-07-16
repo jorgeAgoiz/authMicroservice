@@ -95,17 +95,14 @@ export const updateUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  const {
-    userId,
-    full_name,
-    email,
-    birthday,
-    province,
-    city,
-    profile_picture,
-    languages,
-  } = req.body;
+  const { userId, full_name, email, birthday, province, city, languages } =
+    req.body;
   let password = req.body.password;
+  let profile_picture: string | undefined = "";
+  if (req.file) {
+    const pathName: IPicture = req.file;
+    profile_picture = pathName.location;
+  }
 
   try {
     if (password) {
@@ -175,3 +172,12 @@ export const deleteUser = async (
   }
 };
 //GET "/auth" ***** Para obtener los usuatios
+export const getUsersOf = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { type_user } = req.params;
+  console.log(type_user);
+  /* Continue Here To Develop this Controller */
+};
