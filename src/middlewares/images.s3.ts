@@ -1,10 +1,16 @@
+import S3 from "aws-sdk/clients/s3";
 import multer from "multer";
 import multerS3 from "multer-s3";
-import aws from "aws-sdk";
 import { v4 as uuidv4 } from "uuid";
-import { ACCESS_KEY_AWS, SECRET_KEY_AWS, BUCKET_NAME } from "../util/env.vars";
+import {
+  ACCESS_KEY_AWS,
+  SECRET_KEY_AWS,
+  BUCKET_NAME,
+  BUCKET_REGION,
+} from "../util/env.vars";
 
-const s3 = new aws.S3({
+const s3 = new S3({
+  region: BUCKET_REGION,
   accessKeyId: ACCESS_KEY_AWS,
   secretAccessKey: SECRET_KEY_AWS,
 });
@@ -21,12 +27,12 @@ const fileFilter = (req: any, file: any, cb: any) => {
   }
 };
 
-export const uploadS3 = multer({
+const multerS3Upload = multer({
   fileFilter: fileFilter,
   storage: multerS3({
     s3: s3,
     bucket: BUCKET_NAME,
-    acl: "public-read",
+    acl: "public-read-write",
     contentType: multerS3.AUTO_CONTENT_TYPE,
     metadata: function (req, file, cb) {
       cb(null, { fieldName: file.fieldname });
@@ -36,3 +42,5 @@ export const uploadS3 = multer({
     },
   }),
 });
+
+export default multerS3Upload;

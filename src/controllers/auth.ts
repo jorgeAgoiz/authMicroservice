@@ -22,8 +22,8 @@ export const signUpUser = async (
     city,
   } = req.body;
 
-  const picture = req.file;
-  console.log(req.file);
+  console.log(req.file); // ************************************************************
+
   try {
     const salt: string = await bcrypt.genSalt(12);
     const hashedPassword: string = await bcrypt.hash(password, salt);
@@ -37,7 +37,6 @@ export const signUpUser = async (
       birthday,
       province,
       city,
-      profile_picture: picture,
     };
     const newUser: IUser = await new User(user).save();
     return res

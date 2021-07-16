@@ -9,3 +9,4 @@ export const SECRET: any = process.env.JWT_SECRET;
 export const ACCESS_KEY_AWS: any = process.env.ACCESS_KEY_AWS;
 export const SECRET_KEY_AWS: any = process.env.SECRET_KEY_AWS;
 export const BUCKET_NAME: any = process.env.BUCKET_NAME;
+export const BUCKET_REGION: any = process.env.BUCKET_REGION;

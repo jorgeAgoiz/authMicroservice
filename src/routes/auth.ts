@@ -6,13 +6,26 @@ import {
   deleteUser,
 } from "../controllers/auth";
 import { verifyToken } from "../middlewares/auth.jwt";
-/* import { uploadS3 } from "../middlewares/images.s3"; */
-/* const upload = uploadS3.single("image"); */
+import multerS3Upload from "../middlewares/images.s3";
+const upload = multerS3Upload.single("profile_picture");
 
 const authRouter = express.Router();
 
 // POST Sign Up Users
-authRouter.post("/auth/signup", signUpUser);
+authRouter.post(
+  "/auth/signup",
+  function (req, res, next) {
+    upload(req, res, function (err: any) {
+      if (err) {
+        return res.status(422).json({
+          error: err,
+        });
+      }
+      next();
+    });
+  },
+  signUpUser
+);
 
 // POST Sign In Users
 authRouter.post("/auth/signin", signInUser);
