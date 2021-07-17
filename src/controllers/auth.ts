@@ -177,7 +177,23 @@ export const getUsersOf = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { type_user } = req.params;
-  console.log(type_user);
-  /* Continue Here To Develop this Controller */
+  const type_user: string = req.params.type_user;
+  const id = req.query.id;
+
+  try {
+    if (!id) {
+      const listUsers = await User.find({ type_user });
+      return res.status(200).json({ users: listUsers, status_code: 200 });
+    }
+
+    const specifiedUser = await User.findById(id);
+    if (!specifiedUser) {
+      return res
+        .status(200)
+        .json({ message: "This user does not exist", status_code: 200 });
+    }
+    return res.status(200).json({ user: specifiedUser, status_code: 200 });
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message, status_code: 400 });
+  }
 };

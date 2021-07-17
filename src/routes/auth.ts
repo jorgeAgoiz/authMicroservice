@@ -24,6 +24,6 @@ authRouter.patch("/auth", [verifyToken, goUpload], updateUser);
 authRouter.delete("/auth", verifyToken, deleteUser);
 
 // GET Get users of
-authRouter.get("/auth/:type_user", getUsersOf);
+authRouter.get("/auth/:type_user", verifyToken, getUsersOf);
 
 export default authRouter;
