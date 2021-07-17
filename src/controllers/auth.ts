@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import User from "../models/user";
 import bcrypt from "bcrypt";
 import { IUser, IPicture, Reminder } from "../types/auth";
@@ -7,11 +7,7 @@ import { SECRET } from "../util/env.vars";
 import { NextKeyMarker } from "aws-sdk/clients/s3";
 
 // POST "/auth/signup"
-export const signUpUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const signUpUser: RequestHandler = async (req, res, next) => {
   const {
     type_user,
     full_name,
@@ -53,12 +49,8 @@ export const signUpUser = async (
 };
 
 // POST "/auth/signin" ******* JWT Implementado
-export const signInUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { password, email } = req.body;
+export const signInUser: RequestHandler = async (req, res, next) => {
+  const { password, email }: { password: string; email: string } = req.body;
   try {
     const user = await User.findOne({ email });
     if (user) {
@@ -91,11 +83,7 @@ export const signInUser = async (
 };
 
 //PATCH "/auth" ***** Para actualizar perfil de usuario
-export const updateUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const updateUser: RequestHandler = async (req, res, next) => {
   const { userId, full_name, email, birthday, province, city, languages } =
     req.body;
   let password = req.body.password;
@@ -146,12 +134,8 @@ export const updateUser = async (
 };
 
 //DELETE "/auth" ***** Para eliminar usuario
-export const deleteUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { id } = req.body;
+export const deleteUser: RequestHandler = async (req, res, next) => {
+  const { id }: { id: string } = req.body;
 
   try {
     const userRemoved = await User.findByIdAndDelete(id).select({
@@ -174,13 +158,9 @@ export const deleteUser = async (
 };
 
 //GET "/auth" ***** Para obtener los usuatios
-export const getUsersOf = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const getUsersOf: RequestHandler = async (req, res, next) => {
   const type_user: string = req.params.type_user;
-  const id = req.query.id;
+  const id = (req.query as { id: string }).id;
 
   try {
     if (!id) {
@@ -202,11 +182,7 @@ export const getUsersOf = async (
 };
 
 //POST "/auth/reminder"
-export const reminderPassword = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const reminderPassword: RequestHandler = (req, res, next) => {
   const { email, userId }: Reminder = req.body;
 
   console.log(email);
