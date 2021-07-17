@@ -1,5 +1,6 @@
 import { File } from "aws-sdk/clients/codecommit";
 import { Document } from "mongoose";
+import { type } from "os";
 
 export interface IUser extends Document {
   type_user: string;
@@ -31,3 +32,8 @@ export interface IPicture {
   etag?: string;
   versionId?: any;
 }
+
+export type Reminder = {
+  email: string;
+  userId: string;
+};

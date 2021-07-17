@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/user";
 import bcrypt from "bcrypt";
-import { IUser, IPicture } from "../types/auth";
+import { IUser, IPicture, Reminder } from "../types/auth";
 import jwt from "jsonwebtoken";
 import { SECRET } from "../util/env.vars";
+import { NextKeyMarker } from "aws-sdk/clients/s3";
 
 // POST "/auth/signup"
 export const signUpUser = async (
@@ -171,6 +172,7 @@ export const deleteUser = async (
     return res.status(400).json({ message: error.message, status_code: 400 });
   }
 };
+
 //GET "/auth" ***** Para obtener los usuatios
 export const getUsersOf = async (
   req: Request,
@@ -182,11 +184,12 @@ export const getUsersOf = async (
 
   try {
     if (!id) {
-      const listUsers = await User.find({ type_user });
+      const listUsers: Array<IUser> = await User.find({ type_user });
       return res.status(200).json({ users: listUsers, status_code: 200 });
     }
 
-    const specifiedUser = await User.findById(id);
+    const specifiedUser: IUser | null = await User.findById(id);
+
     if (!specifiedUser) {
       return res
         .status(200)
@@ -196,4 +199,17 @@ export const getUsersOf = async (
   } catch (error: any) {
     return res.status(400).json({ message: error.message, status_code: 400 });
   }
+};
+
+//POST "/auth/reminder"
+export const reminderPassword = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { email, userId }: Reminder = req.body;
+
+  console.log(email);
+  console.log(userId);
+  /* Here I must continue codding */
 };
