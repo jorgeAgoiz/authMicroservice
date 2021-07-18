@@ -1,6 +1,4 @@
-import { File } from "aws-sdk/clients/codecommit";
 import { Document } from "mongoose";
-import { type } from "os";
 
 export interface IUser extends Document {
   type_user: string;

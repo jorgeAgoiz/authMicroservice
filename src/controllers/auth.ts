@@ -3,8 +3,10 @@ import User from "../models/user";
 import bcrypt from "bcrypt";
 import { IUser, IPicture, Reminder } from "../types/auth";
 import jwt from "jsonwebtoken";
-import { SECRET } from "../util/env.vars";
-import { NextKeyMarker } from "aws-sdk/clients/s3";
+import { MAIL_NAME, SECRET } from "../util/env.vars";
+import { transporter } from "../util/nodemailer.config";
+
+const MAIL_USER = MAIL_NAME;
 
 // POST "/auth/signup"
 export const signUpUser: RequestHandler = async (req, res, next) => {
@@ -17,7 +19,7 @@ export const signUpUser: RequestHandler = async (req, res, next) => {
     birthday,
     province,
     city,
-  } = req.body;
+  }: IUser = req.body;
   let profile_picture: string | undefined = "";
   if (req.file) {
     const pathName: IPicture = req.file;
@@ -86,7 +88,7 @@ export const signInUser: RequestHandler = async (req, res, next) => {
 export const updateUser: RequestHandler = async (req, res, next) => {
   const { userId, full_name, email, birthday, province, city, languages } =
     req.body;
-  let password = req.body.password;
+  let { password }: { password: string } = req.body.password;
   let profile_picture: string | undefined = "";
   if (req.file) {
     const pathName: IPicture = req.file;
@@ -182,10 +184,22 @@ export const getUsersOf: RequestHandler = async (req, res, next) => {
 };
 
 //POST "/auth/reminder"
-export const reminderPassword: RequestHandler = (req, res, next) => {
+export const reminderPassword: RequestHandler = async (req, res, next) => {
   const { email, userId }: Reminder = req.body;
 
-  console.log(email);
-  console.log(userId);
-  /* Here I must continue codding */
+  const user: IUser | null = await User.findOne({ _id: userId, email });
+
+  if (user) {
+    user.password = "loquesea";
+    await user.save();
+    console.log(user);
+    /* const mailSended = await transporter.sendMail({
+    from: `"Questions Quiz" ${MAIL_USER}`,
+    to: user.email,
+    subject: 'Tu contraseña',
+    html: ''
+  }) */
+  }
+  /* La idea es una ruta para enviar el mail de resetear password 
+  y otra ruta para setear un nuevo password */
 };
