@@ -9,6 +9,7 @@ import {
 } from "../controllers/auth";
 import { verifyToken } from "../middlewares/auth.jwt";
 import { goUpload } from "../middlewares/images.s3";
+import { resetPassword } from "../controllers/auth";
 
 const authRouter = express.Router();
 
@@ -27,7 +28,10 @@ authRouter.delete("/auth", verifyToken, deleteUser);
 // GET Get users of
 authRouter.get("/auth/:type_user", verifyToken, getUsersOf);
 
-// POST Password reminder
-authRouter.post("/auth/reminder", verifyToken, reminderPassword);
+// POST Send email to reset password
+authRouter.post("/auth/reset", verifyToken, reminderPassword);
+
+// PATCH Password reset
+authRouter.patch("/auth/reset", resetPassword);
 
 export default authRouter;

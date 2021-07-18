@@ -21,7 +21,11 @@ app.use(apiLimiter);
 app.use(authRouter);
 
 mongoose
-  .connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then((result) => {
     app.listen(PORT, () => {
       console.log(`Listening in port ${PORT}....`);

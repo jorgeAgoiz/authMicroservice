@@ -86,8 +86,25 @@ export const signInUser: RequestHandler = async (req, res, next) => {
 
 //PATCH "/auth" ***** Para actualizar perfil de usuario
 export const updateUser: RequestHandler = async (req, res, next) => {
-  const { userId, full_name, email, birthday, province, city, languages } =
-    req.body;
+  const {
+    userId,
+    full_name,
+    email,
+    birthday,
+    province,
+    city,
+    languages,
+    oldPassword,
+  }: {
+    userId: string;
+    full_name: string;
+    email: string;
+    birthday: Date;
+    province: string;
+    city: string;
+    languages: Array<string>;
+    oldPassword: string;
+  } = req.body;
   let { password }: { password: string } = req.body.password;
   let profile_picture: string | undefined = "";
   if (req.file) {
@@ -96,7 +113,7 @@ export const updateUser: RequestHandler = async (req, res, next) => {
   }
 
   try {
-    if (password) {
+    if (password && oldPassword && password === oldPassword) {
       const salt: string = await bcrypt.genSalt(12);
       const hashedPassword: string = await bcrypt.hash(password, salt);
       password = hashedPassword;
@@ -116,7 +133,7 @@ export const updateUser: RequestHandler = async (req, res, next) => {
       updateUser,
       {
         new: true,
-        omitUndefined: true,
+        omitUndefined: true, // Omite los undefined al modificar el registro
       }
     ).select({ password: 0 });
     if (!newUserProfile) {
@@ -174,8 +191,8 @@ export const getUsersOf: RequestHandler = async (req, res, next) => {
 
     if (!specifiedUser) {
       return res
-        .status(200)
-        .json({ message: "This user does not exist", status_code: 200 });
+        .status(404)
+        .json({ message: "This user does not exist", status_code: 404 });
     }
     return res.status(200).json({ user: specifiedUser, status_code: 200 });
   } catch (error: any) {
@@ -183,23 +200,60 @@ export const getUsersOf: RequestHandler = async (req, res, next) => {
   }
 };
 
-//POST "/auth/reminder"
+//POST "/auth/reset"
 export const reminderPassword: RequestHandler = async (req, res, next) => {
   const { email, userId }: Reminder = req.body;
 
-  const user: IUser | null = await User.findOne({ _id: userId, email });
-
-  if (user) {
-    user.password = "loquesea";
-    await user.save();
-    console.log(user);
-    /* const mailSended = await transporter.sendMail({
-    from: `"Questions Quiz" ${MAIL_USER}`,
-    to: user.email,
-    subject: 'Tu contraseña',
-    html: ''
-  }) */
+  try {
+    const user: IUser | null = await User.findOne({ _id: userId, email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found.", status_code: 404 });
+    }
+    const mailSended = await transporter.sendMail({
+      from: `"Clases Idiomas App" ${MAIL_USER}`,
+      to: user.email,
+      subject: "Resetea tu contraseña",
+      html: `
+    <h1>Resetear Contraseña</h1>
+    <p>
+    Haz click en el siguiente enlace para resetear tu contraseña: 
+    ${"www.google.com"}
+    </p>
+    ` /****** AJUSTAR ENLACE Incluyendo el ID en la petición para el fronta*/,
+    });
+    return res.status(200).json({
+      message: "Email sended, check your inbox",
+      response: mailSended.response,
+      status_code: 200,
+    });
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message, status_code: 400 });
   }
-  /* La idea es una ruta para enviar el mail de resetear password 
-  y otra ruta para setear un nuevo password */
+};
+
+//PATCH "/auth/reset"
+export const resetPassword: RequestHandler = async (req, res, next) => {
+  const { id, newPassword }: { id: string; newPassword: string } = req.body;
+
+  try {
+    const user: IUser | null = await User.findById(id);
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found", status_code: 404 });
+    }
+    const salt: string = await bcrypt.genSalt(12);
+    const newPassHashed: string = await bcrypt.hash(newPassword, salt);
+    user.password = newPassHashed;
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ message: "Password reseted", status_code: 200 });
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message, status_code: 400 });
+  }
 };
