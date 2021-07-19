@@ -10,7 +10,7 @@ import { apiLimiter } from "./util/rate.limiter";
 const connectionString: string =
   process.env.NODE_ENV === "test" ? MONGODB_URI_TEST : MONGODB_URI;
 
-const app = express();
+export const app = express();
 
 //Middlewares
 app.use(express.json());
