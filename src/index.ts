@@ -6,11 +6,10 @@ import compression from "compression";
 import cors from "cors";
 import helmet from "helmet";
 import { apiLimiter } from "./util/rate.limiter";
+export const app = express();
 
 const connectionString: string =
   process.env.NODE_ENV === "test" ? MONGODB_URI_TEST : MONGODB_URI;
-
-export const app = express();
 
 //Middlewares
 app.use(express.json());

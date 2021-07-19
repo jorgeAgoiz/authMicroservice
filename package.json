@@ -4,7 +4,7 @@
   "description": "Auth Microservice",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test jest --verbose",
+    "test": "cross-env NODE_ENV=test jest --verbose ",
     "start": "cross-env NODE_ENV=production node build/index.js",
     "dev": "cross-env NODE_ENV=development nodemon src/index.ts",
     "build": "tsc -p ."
@@ -52,7 +52,7 @@
     "@types/nodemailer": "6.4.4",
     "@types/supertest": "2.0.11",
     "@types/uuid": "8.3.1",
-    "cross-env": "^7.0.3",
+    "cross-env": "7.0.3",
     "jest": "27.0.6",
     "nodemon": "2.0.10",
     "supertest": "6.1.3",
