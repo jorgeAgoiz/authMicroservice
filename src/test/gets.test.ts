@@ -1,9 +1,8 @@
 import { app } from "../index";
 import supertest from "supertest";
-import * as mongoose from "mongoose";
 const api = supertest(app);
 
-describe("Testing GET Routes", () => {
+describe("Testing GET Route", () => {
   test.skip("Give me all teachers", async (): Promise<void> => {
     const result = await api
       .get("/auth/teacher")
@@ -46,5 +45,14 @@ describe("Testing GET Routes", () => {
       .expect("Content-Type", /application\/json/);
 
     expect(result.body.user).toHaveProperty("email", "jorgeagoiz@gmail.com");
+  });
+
+  test.skip("Request without token, I expect to recieve an error.", async () => {
+    const result = await api
+      .get("/auth/student")
+      .expect(403)
+      .expect("Content-Type", /application\/json/);
+
+    expect(result.body.message).toBe("Token not found");
   });
 });
