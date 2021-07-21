@@ -5,6 +5,7 @@ import { IUser, IPicture, Reminder } from "../types/auth";
 import jwt from "jsonwebtoken";
 import { MAIL_NAME, SECRET } from "../util/env.vars";
 import { transporter } from "../util/nodemailer.config";
+import { ObjectId } from "mongodb";
 
 const MAIL_USER = MAIL_NAME;
 
@@ -46,7 +47,7 @@ export const signUpUser: RequestHandler = async (req, res, next) => {
       .status(201)
       .json({ message: "User registered", user: newUser, status_code: 201 });
   } catch (error: any) {
-    return res.status(400).json({ message: error.message, status_code: 500 });
+    return res.status(400).json({ message: error.message, status_code: 400 });
   }
 };
 
@@ -154,7 +155,7 @@ export const updateUser: RequestHandler = async (req, res, next) => {
 
 //DELETE "/auth" ***** Para eliminar usuario
 export const deleteUser: RequestHandler = async (req, res, next) => {
-  const { id }: { id: string } = req.body;
+  const { id }: { id: ObjectId } = req.body; // ***** Check
 
   try {
     const userRemoved = await User.findByIdAndDelete(id).select({
@@ -172,6 +173,7 @@ export const deleteUser: RequestHandler = async (req, res, next) => {
       status_code: 200,
     });
   } catch (error: any) {
+    console.log(error);
     return res.status(400).json({ message: error.message, status_code: 400 });
   }
 };
