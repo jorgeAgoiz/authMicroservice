@@ -72,3 +72,21 @@ describe("Testing Create User POST", () => {
     );
   });
 });
+
+describe("Testing Log In Route POST", () => {
+  const userForLogin = {
+    email: "mnavassanc@gmail.com",
+    password: "12345",
+  };
+
+  test("LogIn successfully", async () => {
+    const result = await api
+      .post("/auth/signin")
+      .send(userForLogin)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(result.body.message).toBe("Logged");
+    expect(result.body.user_token).toBeTruthy();
+  });
+});

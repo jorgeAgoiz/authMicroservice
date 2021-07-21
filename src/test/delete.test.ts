@@ -5,8 +5,8 @@ import { IUser } from "../types/auth";
 const api = supertest(app);
 
 describe("Testing delete users route", () => {
-  beforeAll(async () => {
-    /* const newUser: Object = {
+  /* beforeAll(async () => {
+    const newUser: Object = {
       type_user: "teacher",
       full_name: "Maria Navas",
       email: "mnavassanc@gmail.com",
@@ -17,17 +17,18 @@ describe("Testing delete users route", () => {
       city: "Pinto",
     };
 
-    const user: IUser = await new User(newUser).save(); */
-  });
+    const user: IUser = await new User(newUser).save();
+  }); */
 
-  test("Delete user successfully", async () => {
+  test.skip("Delete user successfully", async () => {
     const result = await api
       .delete("/auth")
       .set(
         "Authorization",
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjY4ZTYxM2NjMzE5NTdmNGY0MDQyZSIsImNpdHkiOiJQaW50byIsImlhdCI6MTYyNjg1OTQ5MSwiZXhwIjoxNjI2ODY2NjkxfQ.NFS0vqtA5lsIzPMlo9D3qBEpkhc6o-UeKme4hvDayDM"
+        "Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjgxNzY0OTBlNDE1MDY2ODU3YzBiNSIsImNpdHkiOiJQaW50byIsImlhdCI6MTYyNjg3MTY2OSwiZXhwIjoxNjI2ODc4ODY5fQ.ZVUx1BmVl2ckfA2KZ4_zYXb_tIpGkZwuD6ybbH3TKy0"
       )
-      .send({ id: "0f68e613cc31957f4f4042e" })
+      .set("Accept", "application/json")
+      .send({ id: "60f8176490e415066857c0b5" })
       .expect(200)
       .expect("Content-Type", /application\/json/);
 

@@ -155,10 +155,10 @@ export const updateUser: RequestHandler = async (req, res, next) => {
 
 //DELETE "/auth" ***** Para eliminar usuario
 export const deleteUser: RequestHandler = async (req, res, next) => {
-  const { id }: { id: ObjectId } = req.body; // ***** Check
+  const { id }: { id: string } = req.body; // ***** Check
 
   try {
-    const userRemoved = await User.findByIdAndDelete(id).select({
+    const userRemoved = await User.findOneAndDelete({ _id: id }).select({
       password: 0,
     });
     if (!userRemoved) {
@@ -173,7 +173,6 @@ export const deleteUser: RequestHandler = async (req, res, next) => {
       status_code: 200,
     });
   } catch (error: any) {
-    console.log(error);
     return res.status(400).json({ message: error.message, status_code: 400 });
   }
 };
