@@ -5,7 +5,6 @@ import { IUser, IPicture, Reminder } from "../types/auth";
 import jwt from "jsonwebtoken";
 import { MAIL_NAME, SECRET } from "../util/env.vars";
 import { transporter } from "../util/nodemailer.config";
-import { ObjectId } from "mongodb";
 
 const MAIL_USER = MAIL_NAME;
 
