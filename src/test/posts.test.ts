@@ -78,8 +78,16 @@ describe("Testing Log In Route POST", () => {
     email: "mnavassanc@gmail.com",
     password: "12345",
   };
+  const incorrectPasssword = {
+    email: "mnavassanc@gmail.com",
+    password: "123456789",
+  };
+  const incorrectEmail = {
+    email: "emailInvalido@gmail.com",
+    password: "12345",
+  };
 
-  test("LogIn successfully", async () => {
+  test.skip("LogIn successfully", async () => {
     const result = await api
       .post("/auth/signin")
       .send(userForLogin)
@@ -88,5 +96,57 @@ describe("Testing Log In Route POST", () => {
 
     expect(result.body.message).toBe("Logged");
     expect(result.body.user_token).toBeTruthy();
+
+    console.log(result.body.user_token);
+  });
+
+  test.skip("Log In with incorrect password, I expect 401 status code", async () => {
+    const result = await api
+      .post("/auth/signin")
+      .send(incorrectPasssword)
+      .expect(401)
+      .expect("Content-Type", /application\/json/);
+
+    expect(result.body.message).toBe("Wrong password");
+  });
+
+  test.skip("Log In with an incorrect email, I expect 401 status code.", async () => {
+    const result = await api
+      .post("/auth/signin")
+      .send(incorrectEmail)
+      .expect(401)
+      .expect("Content-Type", /application\/json/);
+
+    expect(result.body.message).toBe("Wrong email, user not found.");
+  });
+});
+
+describe.skip("Testing Send link to set a new password", () => {
+  test("Send email to reset password and I expect a 200 status code", async () => {
+    const result = await api
+      .post("/auth/reset")
+      .set(
+        "Authorization",
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjkxODE3OTQxZjBkM2JlNDNlZDc1NyIsImNpdHkiOiJQaW50byIsImlhdCI6MTYyNjkzNzM4MCwiZXhwIjoxNjI2OTQ0NTgwfQ.cuCsHOlIo1Pvp_J7UUdMAv0WtUJnwcdrfPq6qq3zxiQ"
+      )
+      .send({ email: "jorgeagoiz@gmail.com" })
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(result.body.message).toBe("Email sended, check your inbox");
+  });
+
+  test("Input an incorrect email to send an email, I expect 404 status code.", async () => {
+    const result = await api
+      .post("/auth/reset")
+      .set(
+        "Authorization",
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjkxODE3OTQxZjBkM2JlNDNlZDc1NyIsImNpdHkiOiJQaW50byIsImlhdCI6MTYyNjkzNzM4MCwiZXhwIjoxNjI2OTQ0NTgwfQ.cuCsHOlIo1Pvp_J7UUdMAv0WtUJnwcdrfPq6qq3zxiQ"
+      )
+      .send({ email: "jap@gmail.com" })
+      .expect(404)
+      .expect("Content-Type", /application\/json/);
+
+    expect(result.body.message).toBe("User not found.");
   });
 });

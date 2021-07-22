@@ -106,7 +106,7 @@ export const updateUser: RequestHandler = async (req, res, next) => {
     languages: Array<string>;
     oldPassword: string;
   } = req.body;
-  let { password }: { password: string } = req.body.password;
+  let { password }: { password: string | undefined } = req.body;
   let profile_picture: string | undefined = "";
   if (req.file) {
     const pathName: IPicture = req.file;
