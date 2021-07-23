@@ -69,18 +69,32 @@ describe.skip("Testing PATCH Route to Update Profile", () => {
   });
 });
 
-describe("PATCH Route Reset Password", () => {
-  test("Reset password", async () => {
+describe.skip("PATCH Route Reset Password", () => {
+  test.skip("Reset password", async () => {
     const result = await api
       .patch("/auth/reset")
       .set(
         "Authorization",
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjk5N2FhNTljYTFhMTlkODJjODk0ZCIsImNpdHkiOiJ0dWRlbGEiLCJpYXQiOjE2MjcwMjg4NzQsImV4cCI6MTYyNzAzNjA3NH0.mJVqvrF8esRauBl9HSaBrGlKBkoQhl_boRmvL-NHjNM"
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjk5N2FhNTljYTFhMTlkODJjODk0ZCIsImNpdHkiOiJ0dWRlbGEiLCJpYXQiOjE2MjcwNDcyMzUsImV4cCI6MTYyNzA1NDQzNX0.qOY55xSE8W71g-JiGqpAKpsgJGvb0hRnNHLw-R6EFRw"
       )
       .send({ id: "60f997aa59ca1a19d82c894d", newPassword: "121212" })
       .expect(200)
       .expect("Content-Type", /application\/json/);
 
     expect(result.body.message).toBe("Password reseted");
+  });
+
+  test.skip("Triying to reset password, but with wrong ID", async () => {
+    const result = await api
+      .patch("/auth/reset")
+      .set(
+        "Authorization",
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjk5N2FhNTljYTFhMTlkODJjODk0ZCIsImNpdHkiOiJ0dWRlbGEiLCJpYXQiOjE2MjcwNDcyMzUsImV4cCI6MTYyNzA1NDQzNX0.qOY55xSE8W71g-JiGqpAKpsgJGvb0hRnNHLw-R6EFRw"
+      )
+      .send({ id: "60f997aa59ca1a19d82c8912", newPassword: "121212" })
+      .expect(404)
+      .expect("Content-Type", /application\/json/);
+
+    expect(result.body.message).toBe("User not found");
   });
 });
