@@ -2,7 +2,7 @@ import { app } from "../index";
 import supertest from "supertest";
 const api = supertest(app);
 
-describe("Testing GET Route", () => {
+describe.skip("Testing GET Route", () => {
   test.skip("Give me all teachers", async (): Promise<void> => {
     const result = await api
       .get("/auth/teacher")

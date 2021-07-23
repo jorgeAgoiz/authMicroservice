@@ -47,7 +47,7 @@ const signUpUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             .json({ message: "User registered", user: newUser, status_code: 201 });
     }
     catch (error) {
-        return res.status(400).json({ message: error.message, status_code: 500 });
+        return res.status(400).json({ message: error.message, status_code: 400 });
     }
 });
 exports.signUpUser = signUpUser;
@@ -86,7 +86,7 @@ exports.signInUser = signInUser;
 //PATCH "/auth" ***** Para actualizar perfil de usuario
 const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId, full_name, email, birthday, province, city, languages, oldPassword, } = req.body;
-    let { password } = req.body.password;
+    let { password } = req.body;
     let profile_picture = "";
     if (req.file) {
         const pathName = req.file;
@@ -130,9 +130,9 @@ const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 exports.updateUser = updateUser;
 //DELETE "/auth" ***** Para eliminar usuario
 const deleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.body;
+    const { id } = req.body; // ***** Check
     try {
-        const userRemoved = yield user_1.default.findByIdAndDelete(id).select({
+        const userRemoved = yield user_1.default.findOneAndDelete({ _id: id }).select({
             password: 0,
         });
         if (!userRemoved) {

@@ -4,7 +4,7 @@ import User from "../models/user";
 import { IUser } from "../types/auth";
 const api = supertest(app);
 
-describe("Testing delete users route", () => {
+describe.skip("Testing delete users route", () => {
   /* beforeAll(async () => {
     const newUser: Object = {
       type_user: "teacher",

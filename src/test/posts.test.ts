@@ -3,7 +3,7 @@ import supertest from "supertest";
 import User from "../models/user";
 const api = supertest(app);
 
-describe("Testing Create User POST", () => {
+describe.skip("Testing Create User POST", () => {
   // Antes de
   beforeAll(async () => {
     await User.deleteMany({});
@@ -73,7 +73,7 @@ describe("Testing Create User POST", () => {
   });
 });
 
-describe("Testing Log In Route POST", () => {
+describe.skip("Testing Log In Route POST", () => {
   const userForLogin = {
     email: "mnavassanc@gmail.com",
     password: "12345",
@@ -122,7 +122,7 @@ describe("Testing Log In Route POST", () => {
 });
 
 describe.skip("Testing Send link to set a new password", () => {
-  test("Send email to reset password and I expect a 200 status code", async () => {
+  test.skip("Send email to reset password and I expect a 200 status code", async () => {
     const result = await api
       .post("/auth/reset")
       .set(
@@ -136,7 +136,7 @@ describe.skip("Testing Send link to set a new password", () => {
     expect(result.body.message).toBe("Email sended, check your inbox");
   });
 
-  test("Input an incorrect email to send an email, I expect 404 status code.", async () => {
+  test.skip("Input an incorrect email to send an email, I expect 404 status code.", async () => {
     const result = await api
       .post("/auth/reset")
       .set(
