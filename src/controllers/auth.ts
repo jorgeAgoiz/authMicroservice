@@ -9,6 +9,7 @@ import { transporter } from "../util/nodemailer.config";
 const MAIL_USER = MAIL_NAME;
 
 // POST "/auth/signup"
+/* send => type_user, full_name, email, password, languages, birthday, province, city, profile_picture */
 export const signUpUser: RequestHandler = async (req, res, next) => {
   const {
     type_user,
@@ -50,7 +51,8 @@ export const signUpUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-// POST "/auth/signin" ******* JWT Implementado
+// POST "/auth/signin"
+/* Send => password, email, token */
 export const signInUser: RequestHandler = async (req, res, next) => {
   const { password, email }: { password: string; email: string } = req.body;
   try {
@@ -85,6 +87,7 @@ export const signInUser: RequestHandler = async (req, res, next) => {
 };
 
 //PATCH "/auth" ***** Para actualizar perfil de usuario
+/* Send => id, email, full_name, birthday, province, city, languages, oldpassword , profile_picture, token */
 export const updateUser: RequestHandler = async (req, res, next) => {
   const {
     userId,
@@ -153,6 +156,7 @@ export const updateUser: RequestHandler = async (req, res, next) => {
 };
 
 //DELETE "/auth" ***** Para eliminar usuario
+/* Send => id, token */
 export const deleteUser: RequestHandler = async (req, res, next) => {
   const { id }: { id: string } = req.body; // ***** Check
 
@@ -177,6 +181,7 @@ export const deleteUser: RequestHandler = async (req, res, next) => {
 };
 
 //GET "/auth" ***** Para obtener los usuatios
+/* Send => type_user, id || city || province, token */
 export const getUsersOf: RequestHandler = async (req, res, next) => {
   const type_user: string = req.params.type_user;
   const id = (req.query as { id: string }).id;
@@ -214,6 +219,7 @@ export const getUsersOf: RequestHandler = async (req, res, next) => {
 };
 
 //POST "/auth/reset"
+/* Send => id, email, token */
 export const reminderPassword: RequestHandler = async (req, res, next) => {
   const { email, userId }: Reminder = req.body;
 
@@ -247,6 +253,7 @@ export const reminderPassword: RequestHandler = async (req, res, next) => {
 };
 
 //PATCH "/auth/reset"
+/* Send => id, newpassword */
 export const resetPassword: RequestHandler = async (req, res, next) => {
   const { id, newPassword }: { id: string; newPassword: string } = req.body;
 
