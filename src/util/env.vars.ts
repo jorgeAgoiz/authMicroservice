@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
 
-export const PORT = process.env.PORT;
+export const PORT: any = process.env.PORT;
 export const MONGODB_URI: any = process.env.MONGODB_URI;
 export const MONGODB_URI_TEST: any = process.env.MONGODB_URI_TEST;
 export const SECRET: any = process.env.JWT_SECRET;

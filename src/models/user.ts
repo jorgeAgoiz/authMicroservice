@@ -1,7 +1,7 @@
 import * as mongoose from "mongoose";
 import { IUser } from "../types/auth";
 
-const Schema = mongoose.Schema;
+const Schema: typeof mongoose.Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {

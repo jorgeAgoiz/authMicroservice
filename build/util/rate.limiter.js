@@ -8,6 +8,6 @@ const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 exports.apiLimiter = express_rate_limit_1.default({
     windowMs: 10 * 60 * 1000,
     max: 120,
-    message: "Too many accounts created from this IP, please try again after a ten minutes.",
+    message: "Too many request from this IP, please try again after a ten minutes.",
 });
 //# sourceMappingURL=rate.limiter.js.map

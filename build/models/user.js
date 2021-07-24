@@ -56,10 +56,12 @@ const userSchema = new Schema({
     province: {
         type: String,
         required: true,
+        lowercase: true,
     },
     city: {
         type: String,
         required: true,
+        lowercase: true,
     },
     profile_picture: {
         type: String,

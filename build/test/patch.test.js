@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../index");
 const supertest_1 = __importDefault(require("supertest"));
 const api = supertest_1.default(index_1.app);
-describe("Testing PATCH Route to Update Profile", () => {
+describe.skip("Testing PATCH Route to Update Profile", () => {
     const updateProfile = {
         userId: "60f91817941f0d3be43ed757",
         birthday: "1992-02-18",
@@ -27,7 +27,7 @@ describe("Testing PATCH Route to Update Profile", () => {
         email: "mnavassanc@gmail.com",
     };
     const udpateInvalidField = {
-        userId: "60f91817941f0d3be43ed757",
+        userId: "60f997aa59ca1a19d82c894d",
         birthday: "Lo Que Sea",
         province: "Navarra",
         city: "Tudela",
@@ -50,17 +50,34 @@ describe("Testing PATCH Route to Update Profile", () => {
             .expect("Content-Type", /application\/json/);
         expect(result.body.message).toBe(`E11000 duplicate key error collection: app-idiomas.users index: email_1 dup key: { email: "${updateEmailBussy.email}" }`);
     }));
-    test("Update profile with an incorrect field, I expect error message", () => __awaiter(void 0, void 0, void 0, function* () {
+    test.skip("Update profile with an incorrect field, I expect error message", () => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield api
             .patch("/auth")
-            .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjkxODE3OTQxZjBkM2JlNDNlZDc1NyIsImNpdHkiOiJaYXJhZ296YSIsImlhdCI6MTYyNjk2MjEwMSwiZXhwIjoxNjI2OTY5MzAxfQ.BlCn8GZGa7BiAdbqk_GExbwAogJKij6HVsaAph0OSp0")
+            .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjk5N2FhNTljYTFhMTlkODJjODk0ZCIsImNpdHkiOiJ0dWRlbGEiLCJpYXQiOjE2MjcwMjg4NzQsImV4cCI6MTYyNzAzNjA3NH0.mJVqvrF8esRauBl9HSaBrGlKBkoQhl_boRmvL-NHjNM")
             .send(udpateInvalidField)
             .expect(400)
             .expect("Content-Type", /application\/json/);
-        console.log(result.body);
-        /* expect(result.body.message).toBe(
-          `E11000 duplicate key error collection: app-idiomas.users index: email_1 dup key: { email: "${updateEmailBussy.email}" }`
-        ); */
+        expect(result.body.message).toBe('Cast to date failed for value "Lo Que Sea" (type string) at path "birthday"');
+    }));
+});
+describe.skip("PATCH Route Reset Password", () => {
+    test.skip("Reset password", () => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield api
+            .patch("/auth/reset")
+            .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjk5N2FhNTljYTFhMTlkODJjODk0ZCIsImNpdHkiOiJ0dWRlbGEiLCJpYXQiOjE2MjcwNDcyMzUsImV4cCI6MTYyNzA1NDQzNX0.qOY55xSE8W71g-JiGqpAKpsgJGvb0hRnNHLw-R6EFRw")
+            .send({ id: "60f997aa59ca1a19d82c894d", newPassword: "121212" })
+            .expect(200)
+            .expect("Content-Type", /application\/json/);
+        expect(result.body.message).toBe("Password reseted");
+    }));
+    test.skip("Triying to reset password, but with wrong ID", () => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield api
+            .patch("/auth/reset")
+            .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjk5N2FhNTljYTFhMTlkODJjODk0ZCIsImNpdHkiOiJ0dWRlbGEiLCJpYXQiOjE2MjcwNDcyMzUsImV4cCI6MTYyNzA1NDQzNX0.qOY55xSE8W71g-JiGqpAKpsgJGvb0hRnNHLw-R6EFRw")
+            .send({ id: "60f997aa59ca1a19d82c8912", newPassword: "121212" })
+            .expect(404)
+            .expect("Content-Type", /application\/json/);
+        expect(result.body.message).toBe("User not found");
     }));
 });
 //# sourceMappingURL=patch.test.js.map

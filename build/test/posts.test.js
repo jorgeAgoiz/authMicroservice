@@ -16,7 +16,7 @@ const index_1 = require("../index");
 const supertest_1 = __importDefault(require("supertest"));
 const user_1 = __importDefault(require("../models/user"));
 const api = supertest_1.default(index_1.app);
-describe("Testing Create User POST", () => {
+describe.skip("Testing Create User POST", () => {
     // Antes de
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield user_1.default.deleteMany({});
@@ -75,7 +75,7 @@ describe("Testing Create User POST", () => {
         expect(result.body.message).toBe('E11000 duplicate key error collection: app-idiomas-test.users index: full_name_1 dup key: { full_name: "Maria Navas" }');
     }));
 });
-describe("Testing Log In Route POST", () => {
+describe.skip("Testing Log In Route POST", () => {
     const userForLogin = {
         email: "mnavassanc@gmail.com",
         password: "12345",
@@ -116,7 +116,7 @@ describe("Testing Log In Route POST", () => {
     }));
 });
 describe.skip("Testing Send link to set a new password", () => {
-    test("Send email to reset password and I expect a 200 status code", () => __awaiter(void 0, void 0, void 0, function* () {
+    test.skip("Send email to reset password and I expect a 200 status code", () => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield api
             .post("/auth/reset")
             .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjkxODE3OTQxZjBkM2JlNDNlZDc1NyIsImNpdHkiOiJQaW50byIsImlhdCI6MTYyNjkzNzM4MCwiZXhwIjoxNjI2OTQ0NTgwfQ.cuCsHOlIo1Pvp_J7UUdMAv0WtUJnwcdrfPq6qq3zxiQ")
@@ -125,7 +125,7 @@ describe.skip("Testing Send link to set a new password", () => {
             .expect("Content-Type", /application\/json/);
         expect(result.body.message).toBe("Email sended, check your inbox");
     }));
-    test("Input an incorrect email to send an email, I expect 404 status code.", () => __awaiter(void 0, void 0, void 0, function* () {
+    test.skip("Input an incorrect email to send an email, I expect 404 status code.", () => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield api
             .post("/auth/reset")
             .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjkxODE3OTQxZjBkM2JlNDNlZDc1NyIsImNpdHkiOiJQaW50byIsImlhdCI6MTYyNjkzNzM4MCwiZXhwIjoxNjI2OTQ0NTgwfQ.cuCsHOlIo1Pvp_J7UUdMAv0WtUJnwcdrfPq6qq3zxiQ")

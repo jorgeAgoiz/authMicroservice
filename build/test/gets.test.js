@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../index");
 const supertest_1 = __importDefault(require("supertest"));
 const api = supertest_1.default(index_1.app);
-describe("Testing GET Route", () => {
+describe.skip("Testing GET Route", () => {
     test.skip("Give me all teachers", () => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield api
             .get("/auth/teacher")

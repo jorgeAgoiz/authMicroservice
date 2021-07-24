@@ -155,9 +155,23 @@ exports.deleteUser = deleteUser;
 const getUsersOf = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const type_user = req.params.type_user;
     const id = req.query.id;
+    const province = req.query.province;
+    const city = req.query.city;
+    let filterQuery = {
+        type_user,
+    };
     try {
         if (!id) {
-            const listUsers = yield user_1.default.find({ type_user });
+            if (province)
+                filterQuery.province = province;
+            if (city)
+                filterQuery.city = city;
+            const listUsers = yield user_1.default.find(filterQuery);
+            if (listUsers.length < 1) {
+                return res
+                    .status(404)
+                    .json({ message: "No users found", status_code: 404 });
+            }
             return res.status(200).json({ users: listUsers, status_code: 200 });
         }
         const specifiedUser = yield user_1.default.findById(id);

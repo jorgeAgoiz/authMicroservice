@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import { SECRET } from "../util/env.vars";
 import User from "../models/user";
