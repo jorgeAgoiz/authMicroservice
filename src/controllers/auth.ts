@@ -1,7 +1,7 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import User from "../models/user";
 import bcrypt from "bcrypt";
-import { IUser, IPicture, Reminder } from "../types/auth";
+import { IUser, IPicture, Reminder, FilterGet } from "../types/auth";
 import jwt from "jsonwebtoken";
 import { MAIL_NAME, SECRET } from "../util/env.vars";
 import { transporter } from "../util/nodemailer.config";
@@ -180,15 +180,28 @@ export const deleteUser: RequestHandler = async (req, res, next) => {
 export const getUsersOf: RequestHandler = async (req, res, next) => {
   const type_user: string = req.params.type_user;
   const id = (req.query as { id: string }).id;
+  const province = (req.query as { province: string }).province;
+  const city = (req.query as { city: string }).city;
+  let filterQuery: FilterGet = {
+    type_user,
+  };
 
   try {
     if (!id) {
-      const listUsers: Array<IUser> = await User.find({ type_user });
+      if (province) filterQuery.province = province;
+      if (city) filterQuery.city = city;
+
+      const listUsers: Array<IUser> = await User.find(filterQuery);
+      if (listUsers.length < 1) {
+        return res
+          .status(404)
+          .json({ message: "No users found", status_code: 404 });
+      }
+
       return res.status(200).json({ users: listUsers, status_code: 200 });
     }
 
     const specifiedUser: IUser | null = await User.findById(id);
-
     if (!specifiedUser) {
       return res
         .status(404)

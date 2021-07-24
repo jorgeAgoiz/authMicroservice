@@ -35,3 +35,9 @@ export type Reminder = {
   email: string;
   userId: string;
 };
+
+export type FilterGet = {
+  type_user: string;
+  province?: string;
+  city?: string;
+};
