@@ -52,7 +52,7 @@ export const signUpUser: RequestHandler = async (req, res, next) => {
 };
 
 // POST "/auth/signin"
-/* Send => password, email, token */
+/* Send => password, email, and you recieved a token */
 export const signInUser: RequestHandler = async (req, res, next) => {
   const { password, email }: { password: string; email: string } = req.body;
   try {
