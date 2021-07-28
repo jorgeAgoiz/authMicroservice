@@ -20,6 +20,7 @@ const env_vars_1 = require("../util/env.vars");
 const nodemailer_config_1 = require("../util/nodemailer.config");
 const MAIL_USER = env_vars_1.MAIL_NAME;
 // POST "/auth/signup"
+/* send => type_user, full_name, email, password, languages, birthday, province, city, profile_picture */
 const signUpUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { type_user, full_name, email, password, languages, birthday, province, city, } = req.body;
     let profile_picture = "";
@@ -51,7 +52,8 @@ const signUpUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.signUpUser = signUpUser;
-// POST "/auth/signin" ******* JWT Implementado
+// POST "/auth/signin"
+/* Send => password, email, token */
 const signInUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { password, email } = req.body;
     try {
@@ -84,6 +86,7 @@ const signInUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.signInUser = signInUser;
 //PATCH "/auth" ***** Para actualizar perfil de usuario
+/* Send => id, email, full_name, birthday, province, city, languages, oldpassword , profile_picture, token */
 const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId, full_name, email, birthday, province, city, languages, oldPassword, } = req.body;
     let { password } = req.body;
@@ -129,6 +132,7 @@ const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.updateUser = updateUser;
 //DELETE "/auth" ***** Para eliminar usuario
+/* Send => id, token */
 const deleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.body; // ***** Check
     try {
@@ -152,6 +156,7 @@ const deleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.deleteUser = deleteUser;
 //GET "/auth" ***** Para obtener los usuatios
+/* Send => type_user, id || city || province, token */
 const getUsersOf = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const type_user = req.params.type_user;
     const id = req.query.id;
@@ -188,6 +193,7 @@ const getUsersOf = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.getUsersOf = getUsersOf;
 //POST "/auth/reset"
+/* Send => id, email, token */
 const reminderPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, userId } = req.body;
     try {
@@ -221,6 +227,7 @@ const reminderPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, f
 });
 exports.reminderPassword = reminderPassword;
 //PATCH "/auth/reset"
+/* Send => id, newpassword */
 const resetPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, newPassword } = req.body;
     try {
