@@ -21,11 +21,6 @@ export const signUpUser: RequestHandler = async (req, res, next) => {
     province,
     city,
   }: IUser = req.body;
-  let profile_picture: string | undefined = "";
-  if (req.file) {
-    const pathName: IPicture = req.file;
-    profile_picture = pathName.location;
-  }
 
   try {
     const salt: string = await bcrypt.genSalt(12);
@@ -40,12 +35,47 @@ export const signUpUser: RequestHandler = async (req, res, next) => {
       birthday,
       province,
       city,
-      profile_picture,
     };
     const newUser: IUser = await new User(user).save();
     return res
       .status(201)
       .json({ message: "User registered", user: newUser, status_code: 201 });
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message, status_code: 400 });
+  }
+};
+
+// PATCH "/auth/profile_pic"
+/* Send => token, email and image */
+export const uploadProfilePic: RequestHandler = async (req, res, next) => {
+  const { userId }: { userId: string } = req.body;
+  let profile_picture: string | undefined = "";
+  if (req.file) {
+    const pathName: IPicture = req.file;
+    profile_picture = pathName.location;
+  }
+
+  try {
+    const newUserPic: IUser | null = await User.findByIdAndUpdate(
+      userId,
+      { profile_picture },
+      {
+        new: true,
+        omitUndefined: true, // Omite los undefined al modificar el registro
+      }
+    ).select({ password: 0 });
+
+    if (!newUserPic) {
+      return res
+        .status(404)
+        .json({ message: "Error, user not found", status_code: 404 });
+    }
+
+    return res.status(201).json({
+      message: "Profile picture updated",
+      user: newUserPic,
+      status_code: 201,
+    });
   } catch (error: any) {
     return res.status(400).json({ message: error.message, status_code: 400 });
   }
@@ -109,11 +139,6 @@ export const updateUser: RequestHandler = async (req, res, next) => {
     oldPassword: string;
   } = req.body;
   let { password }: { password: string | undefined } = req.body;
-  let profile_picture: string | undefined = "";
-  if (req.file) {
-    const pathName: IPicture = req.file;
-    profile_picture = pathName.location;
-  }
 
   try {
     if (password && oldPassword && password === oldPassword) {
@@ -127,7 +152,6 @@ export const updateUser: RequestHandler = async (req, res, next) => {
       birthday,
       province,
       city,
-      profile_picture,
       languages,
       password,
     };

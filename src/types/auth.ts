@@ -9,7 +9,7 @@ export interface IUser extends Document {
   languages?: Array<string>;
   province: string;
   city: string;
-  profile_picture?: string; // Nueva propiedad
+  profile_picture?: string;
 }
 
 export interface IPicture {
@@ -42,7 +42,6 @@ export type FilterGet = {
   city?: string;
 };
 
-/* Implementar posiblemente en las validaciones del modelo de mongodb como enum */
 export const PROVINCES: Array<string> = [
   "alava",
   "albacete",

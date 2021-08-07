@@ -6,6 +6,7 @@ import compression from "compression";
 import cors from "cors";
 import helmet from "helmet";
 import { apiLimiter } from "./util/rate.limiter";
+import { corsOptions } from "./util/cors.config";
 export const app = express();
 
 const connectionString: string =
@@ -14,7 +15,7 @@ const connectionString: string =
 //Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(compression());
 app.use(apiLimiter);
