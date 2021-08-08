@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import User from "../models/user";
 import bcrypt from "bcrypt";
-import { IUser, IPicture, Reminder, FilterGet } from "../types/auth";
+import { IUser, IPicture, Reminder, FilterGet, Verify } from "../types/auth";
 import jwt from "jsonwebtoken";
 import { MAIL_NAME, SECRET } from "../util/env.vars";
 import { transporter } from "../util/nodemailer.config";
@@ -297,6 +297,25 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
     return res
       .status(200)
       .json({ message: "Password reseted", status_code: 200 });
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message, status_code: 400 });
+  }
+};
+
+//GET "/user/verify"
+/* Send ==> full_name, email 
+Just to verify if this user exists in the front-end */
+export const verifyNewUser: RequestHandler = async (req, res, next) => {
+  const user: Verify = req.body;
+
+  try {
+    const userBusy: IUser | null = await User.findOne(user);
+
+    if (!userBusy) {
+      return res.status(200).json({ busy: false, status_code: 200 });
+    } else {
+      return res.status(200).json({ busy: true, status_code: 200 });
+    }
   } catch (error: any) {
     return res.status(400).json({ message: error.message, status_code: 400 });
   }

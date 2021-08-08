@@ -9,7 +9,11 @@ import {
 } from "../controllers/auth";
 import { verifyToken } from "../middlewares/auth.jwt";
 import { goUpload } from "../middlewares/images.s3";
-import { resetPassword, uploadProfilePic } from "../controllers/auth";
+import {
+  resetPassword,
+  uploadProfilePic,
+  verifyNewUser,
+} from "../controllers/auth";
 
 const authRouter = express.Router();
 
@@ -22,6 +26,9 @@ authRouter.patch(
   [verifyToken, goUpload],
   uploadProfilePic
 );
+
+// GET Verify Bussy users
+authRouter.get("/user/verify", verifyNewUser);
 
 // POST Sign In Users
 authRouter.post("/auth/signin", signInUser);

@@ -42,6 +42,11 @@ export type FilterGet = {
   city?: string;
 };
 
+export interface Verify {
+  full_name?: string;
+  email?: string;
+}
+
 export const PROVINCES: Array<string> = [
   "alava",
   "albacete",
