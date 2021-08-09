@@ -27,7 +27,7 @@ authRouter.patch(
   uploadProfilePic
 );
 
-// GET Verify Bussy users
+// POST Verify Bussy users
 authRouter.post("/user/verify", verifyNewUser);
 
 // POST Sign In Users

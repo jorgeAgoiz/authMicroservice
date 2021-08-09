@@ -302,19 +302,28 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
   }
 };
 
-//GET "/user/verify"
+//POST "/user/verify"
 /* Send ==> full_name, email 
 Just to verify if this user exists in the front-end */
 export const verifyNewUser: RequestHandler = async (req, res, next) => {
-  const user: Verify = req.body;
+  const { full_name, email }: Verify = req.body;
 
   try {
-    const userBusy: IUser | null = await User.findOne(user);
+    const nameBusy: IUser | null = await User.findOne({ full_name });
+    const emailBusy: IUser | null = await User.findOne({ email });
 
-    if (!userBusy) {
-      return res.status(200).json({ busy: false, status_code: 200 });
-    } else {
-      return res.status(200).json({ busy: true, status_code: 200 });
+    if (!nameBusy && !emailBusy) {
+      return res
+        .status(200)
+        .json({ field: "any", busy: false, status_code: 200 });
+    } else if (nameBusy) {
+      return res
+        .status(200)
+        .json({ field: "full_name", busy: true, status_code: 200 });
+    } else if (emailBusy) {
+      return res
+        .status(200)
+        .json({ field: "email", busy: true, status_code: 200 });
     }
   } catch (error: any) {
     return res.status(400).json({ message: error.message, status_code: 400 });
