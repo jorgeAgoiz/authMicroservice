@@ -28,7 +28,7 @@ authRouter.patch(
 );
 
 // GET Verify Bussy users
-authRouter.get("/user/verify", verifyNewUser);
+authRouter.post("/user/verify", verifyNewUser);
 
 // POST Sign In Users
 authRouter.post("/auth/signin", signInUser);
