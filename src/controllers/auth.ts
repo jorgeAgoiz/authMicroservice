@@ -96,7 +96,7 @@ export const signInUser: RequestHandler = async (req, res, next) => {
           .json({ message: "Wrong password", status_code: 401 });
       } else {
         const token: string = jwt.sign(
-          { id: user._id, city: user.city },
+          { id: user._id, type_user: user.type_user, city: user.city },
           SECRET,
           {
             expiresIn: 7200,
