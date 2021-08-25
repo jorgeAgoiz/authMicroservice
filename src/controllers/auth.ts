@@ -46,7 +46,7 @@ export const signUpUser: RequestHandler = async (req, res, next) => {
 };
 
 // PATCH "/auth/profile_pic"
-/* Send => token, email and image */
+/* Send => token, userId and image */
 export const uploadProfilePic: RequestHandler = async (req, res, next) => {
   const { userId }: { userId: string } = req.body;
   let profile_picture: string | undefined = "";
