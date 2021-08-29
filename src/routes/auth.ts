@@ -9,6 +9,7 @@ import {
 } from "../controllers/auth";
 import { verifyToken } from "../middlewares/auth.jwt";
 import { goUpload } from "../middlewares/images.s3";
+import { changePassword } from "../controllers/auth";
 import {
   resetPassword,
   uploadProfilePic,
@@ -47,5 +48,8 @@ authRouter.post("/auth/reset", verifyToken, reminderPassword);
 
 // PATCH Password reset
 authRouter.patch("/auth/reset", resetPassword);
+
+//PATCH Change Password
+authRouter.patch("/auth/password", verifyToken, changePassword);
 
 export default authRouter;

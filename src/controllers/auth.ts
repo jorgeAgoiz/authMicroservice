@@ -127,7 +127,6 @@ export const updateUser: RequestHandler = async (req, res, next) => {
     province,
     city,
     languages,
-    oldPassword,
   }: {
     userId: string;
     full_name: string;
@@ -136,16 +135,9 @@ export const updateUser: RequestHandler = async (req, res, next) => {
     province: string;
     city: string;
     languages: Array<string>;
-    oldPassword: string;
   } = req.body;
-  let { password }: { password: string | undefined } = req.body;
 
   try {
-    if (password && oldPassword && password === oldPassword) {
-      const salt: string = await bcrypt.genSalt(12);
-      const hashedPassword: string = await bcrypt.hash(password, salt);
-      password = hashedPassword;
-    }
     const updateUser = {
       full_name,
       email,
@@ -153,7 +145,6 @@ export const updateUser: RequestHandler = async (req, res, next) => {
       province,
       city,
       languages,
-      password,
     };
     const newUserProfile: IUser | null = await User.findByIdAndUpdate(
       userId,
@@ -325,6 +316,68 @@ export const verifyNewUser: RequestHandler = async (req, res, next) => {
         .status(200)
         .json({ field: "email", busy: true, status_code: 200 });
     }
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message, status_code: 400 });
+  }
+};
+
+export const changePassword: RequestHandler = async (req, res, next) => {
+  let {
+    userId,
+    password,
+    oldPassword,
+  }: {
+    userId: string | undefined;
+    password: string | undefined;
+    oldPassword: string | undefined;
+  } = req.body;
+  try {
+    /* Seguiremos aqui retocando el microservicio */
+    if (!password || !oldPassword) {
+      return res
+        .status(400)
+        .json({ message: "Error, incomplete data.", status_code: 400 });
+    }
+    const verifyUserExists: IUser | null = await User.findById(userId);
+    if (!verifyUserExists) {
+      return res
+        .status(400)
+        .json({ message: "Error, user not found.", status_code: 400 });
+    }
+    const validPass: boolean = await bcrypt.compare(
+      password,
+      verifyUserExists.password
+    );
+
+    if (!validPass) {
+      return res
+        .status(400)
+        .json({ message: "Error, not valid password", status_code: 400 });
+    }
+
+    const salt: string = await bcrypt.genSalt(12);
+    const hashedPassword: string = await bcrypt.hash(password, salt);
+    password = hashedPassword;
+
+    const newPasswordUser: IUser | null = await User.findByIdAndUpdate(
+      userId,
+      { password },
+      {
+        new: true,
+        omitUndefined: true, // Omite los undefined al modificar el registro
+      }
+    ).select({ password: 0 });
+    if (!newPasswordUser) {
+      return res
+        .status(404)
+        .json({ message: "Error, user not found", status_code: 404 });
+    }
+
+    return res.status(201).json({
+      message: "Password updated",
+      user: newPasswordUser,
+      status_code: 201,
+    });
   } catch (error: any) {
     return res.status(400).json({ message: error.message, status_code: 400 });
   }
