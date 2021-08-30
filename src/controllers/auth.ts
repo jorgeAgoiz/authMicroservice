@@ -332,12 +332,12 @@ export const changePassword: RequestHandler = async (req, res, next) => {
     oldPassword: string | undefined;
   } = req.body;
   try {
-    /* Seguiremos aqui retocando el microservicio */
     if (!password || !oldPassword) {
       return res
         .status(400)
         .json({ message: "Error, incomplete data.", status_code: 400 });
     }
+
     const verifyUserExists: IUser | null = await User.findById(userId);
     if (!verifyUserExists) {
       return res
@@ -345,10 +345,9 @@ export const changePassword: RequestHandler = async (req, res, next) => {
         .json({ message: "Error, user not found.", status_code: 400 });
     }
     const validPass: boolean = await bcrypt.compare(
-      password,
+      oldPassword,
       verifyUserExists.password
     );
-
     if (!validPass) {
       return res
         .status(400)
@@ -358,7 +357,6 @@ export const changePassword: RequestHandler = async (req, res, next) => {
     const salt: string = await bcrypt.genSalt(12);
     const hashedPassword: string = await bcrypt.hash(password, salt);
     password = hashedPassword;
-
     const newPasswordUser: IUser | null = await User.findByIdAndUpdate(
       userId,
       { password },
@@ -367,12 +365,12 @@ export const changePassword: RequestHandler = async (req, res, next) => {
         omitUndefined: true, // Omite los undefined al modificar el registro
       }
     ).select({ password: 0 });
+
     if (!newPasswordUser) {
       return res
         .status(404)
         .json({ message: "Error, user not found", status_code: 404 });
     }
-
     return res.status(201).json({
       message: "Password updated",
       user: newPasswordUser,
