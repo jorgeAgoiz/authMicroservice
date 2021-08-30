@@ -321,6 +321,9 @@ export const verifyNewUser: RequestHandler = async (req, res, next) => {
   }
 };
 
+//PATCH "/auth/password"
+/* Send ==> userId, password, oldPassword 
+To change the password */
 export const changePassword: RequestHandler = async (req, res, next) => {
   let {
     userId,
