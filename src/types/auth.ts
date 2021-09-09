@@ -40,6 +40,7 @@ export type FilterGet = {
   type_user: string;
   province?: string;
   city?: string;
+  languages?: string;
 };
 
 export interface Verify {

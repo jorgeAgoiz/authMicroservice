@@ -202,6 +202,7 @@ export const getUsersOf: RequestHandler = async (req, res, next) => {
   const id = (req.query as { id: string }).id;
   const province = (req.query as { province: string }).province;
   const city = (req.query as { city: string }).city;
+  const language = (req.query as { language: string }).language;
   let filterQuery: FilterGet = {
     type_user,
   };
@@ -210,6 +211,7 @@ export const getUsersOf: RequestHandler = async (req, res, next) => {
     if (!id) {
       if (province) filterQuery.province = province;
       if (city) filterQuery.city = city;
+      if (language) filterQuery.languages = language;
 
       const listUsers: Array<IUser> = await User.find(filterQuery, {
         password: 0,
