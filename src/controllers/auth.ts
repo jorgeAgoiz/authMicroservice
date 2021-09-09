@@ -211,7 +211,9 @@ export const getUsersOf: RequestHandler = async (req, res, next) => {
       if (province) filterQuery.province = province;
       if (city) filterQuery.city = city;
 
-      const listUsers: Array<IUser> = await User.find(filterQuery);
+      const listUsers: Array<IUser> = await User.find(filterQuery, {
+        password: 0,
+      });
       if (listUsers.length < 1) {
         return res
           .status(404)
@@ -221,7 +223,9 @@ export const getUsersOf: RequestHandler = async (req, res, next) => {
       return res.status(200).json({ users: listUsers, status_code: 200 });
     }
 
-    const specifiedUser: IUser | null = await User.findById(id);
+    const specifiedUser: IUser | null = await User.findById(id).select({
+      password: 0,
+    });
     if (!specifiedUser) {
       return res
         .status(404)
