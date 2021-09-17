@@ -10,6 +10,8 @@ export interface IUser extends Document {
   province: string;
   city: string;
   profile_picture?: string;
+  chat_id: number;
+  chat_secret: string;
 }
 
 export interface IPicture {

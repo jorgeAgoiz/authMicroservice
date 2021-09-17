@@ -20,6 +20,8 @@ export const signUpUser: RequestHandler = async (req, res, next) => {
     birthday,
     province,
     city,
+    chat_id,
+    chat_secret,
   }: IUser = req.body;
 
   try {
@@ -35,12 +37,15 @@ export const signUpUser: RequestHandler = async (req, res, next) => {
       birthday,
       province,
       city,
+      chat_id,
+      chat_secret,
     };
     const newUser: IUser = await new User(user).save();
     return res
       .status(201)
       .json({ message: "User registered", user: newUser, status_code: 201 });
   } catch (error: any) {
+    console.log(error.message);
     return res.status(400).json({ message: error.message, status_code: 400 });
   }
 };

@@ -49,6 +49,14 @@ const userSchema = new Schema(
     profile_picture: {
       type: String,
     },
+    chat_id: {
+      type: Number,
+      required: true,
+    },
+    chat_secret: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
